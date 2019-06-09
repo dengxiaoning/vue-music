@@ -60,8 +60,6 @@
     }
   }
 </script>
-<!--  wadwd -->
-<!-- E:\vue\vue-music\src\components\singer-detail\singer-detail.vue -->
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   .slide-enter-active, .slide-leave-active

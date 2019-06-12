@@ -6,7 +6,7 @@
 
 <script type="text/ecmascript-6">
   import {mapGetters} from 'vuex'
-  import {getSingerDetail} from '@/api/singer'
+  import {getSingerDetail, getMusicBySongmid} from '@/api/singer'
   import {ERR_OK} from '@/api/config'
   import {createSong} from '@/common/js/song'
   import MusicList from '@/components/music-list/music-list'
@@ -29,7 +29,7 @@
       ])
     },
     created() {
-    // this.singer = this.$store.state.singer
+      // this.singer = this.$store.state.singer
       this._getDetail()
     },
     methods: {
@@ -49,7 +49,18 @@
         list.forEach((item) => {
           let {musicData} = item
           if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
+            // 传入songmid 查询获取 vkey
+            getMusicBySongmid(musicData.songmid).then(res => {
+              if (res.code === ERR_OK) {
+                const svkey = res.data.items
+                const songVkey = svkey[0].vkey
+                const filename = svkey[0].filename
+                const newSong = createSong(musicData, filename, songVkey)
+                ret.push(newSong)
+              } else {
+                console.log('查询 svkey  错误！')
+              }
+            })
           }
         })
         return ret

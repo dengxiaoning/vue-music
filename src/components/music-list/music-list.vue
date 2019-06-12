@@ -1,6 +1,6 @@
 <template>
   <div class="music-list">
-    <div class="back" @click="back">
+    <div class="back" @click="backParent">
       <i class="icon-back"></i>
     </div>
     <h1 class="title" v-html="title"></h1>
@@ -74,10 +74,12 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
-      back() {
+      backParent() {
+        console.log('click ...')
         this.$router.back()
       },
       selectItem(item, index) {
+        console.log('set actions ...')
         this.selectPlay({
           list: this.songs,
           index: index

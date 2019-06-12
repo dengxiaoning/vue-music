@@ -1,5 +1,6 @@
 import jsonp from '@/common/js/jsonp'
 import {commonparams, options} from './config'
+import axios from 'axios'
 
 export function getSingerList() {
   const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
@@ -31,4 +32,26 @@ export function getSingerDetail(singeId) {
     singermid: singeId
   })
   return jsonp(url, data, options)
+}
+
+export function getMusicBySongmid(songmid) {
+  const url = '/api/getMusic'
+  const data = Object.assign({}, commonparams, {
+    songmid: songmid,
+    filename: 'C400' + songmid + '.m4a',
+    guid: 3779844088, // 改值需要随时跟随qq音乐实际的播放器而改变
+    platform: 'yqq',
+    loginUin: 0,
+    hostUin: 0,
+    needNewCode: 0,
+    cid: 205361747,
+    uin: 2502,
+    format: 'json'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
 }

@@ -24,7 +24,6 @@
         return `${song.singer} . ${song.album}`
       },
       selectItem(item, index) {
-        console.log('派发事件')
         this.$emit('select', item, index)
       }
     }

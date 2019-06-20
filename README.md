@@ -139,6 +139,12 @@ Error: [vuex] do not mutate vuex store state outside mutation handlers.
 这样就ok 了， 所以细心是关键哈
 
 
+* 8 知道为啥
+actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})` mode 取出来始终为undefined
+```
+  commit(types.SET_PLAY_MODE, playMode.sequence)
+```
+
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|
@@ -151,3 +157,4 @@ Error: [vuex] do not mutate vuex store state outside mutation handlers.
 |    GO         |        know         |                       |
 |  JAVASCRIPT   |        general      |          3Y           |
 
+###### 该项目为自我学习案例，写得不好 大神勿喷，觉得有帮助的请捧捧场 star 一下作为鼓励，谢谢。

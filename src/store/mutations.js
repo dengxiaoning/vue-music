@@ -23,7 +23,7 @@ const mutations = {
   //  Vue.set(state, 'sequenceList', list)
   },
   [types.SET_PLAY_MODE](state, mode) {
-    //  state.mode = mode
+    //  state.playMode = playMode
     Vue.set(state, 'mode', mode)
   },
   [types.SET_CURRENT_INDEX](state, index) {

@@ -131,6 +131,9 @@
         let anchorIndex = parseInt(this.touch.anchorIndex + delta)
         this.scrollTo(anchorIndex)
       },
+      refresh() {
+        this.$refs.listview.refresh()
+      },
       scroll(pos) {
         this.scrollY = pos.y
       },

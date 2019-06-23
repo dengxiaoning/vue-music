@@ -26,6 +26,9 @@
                 <img class="image" :src="cSong.image"/>
               </div>
             </div>
+            <div class="playing-lyric-wrapper">
+              <div class="playing-lyric">{{playingLyric}}</div>
+            </div>
           </div>
           <Scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.line">
             <div class="lyric-wrapper">
@@ -119,7 +122,8 @@
         radius: 32,
         currentLyric: null,
         currentLineNum: 0,
-        currentShow: 'cd'
+        currentShow: 'cd',
+        playingLyric: ''
       }
     },
     computed: {
@@ -156,10 +160,13 @@
     },
     watch: {
       cSong() {
-        this.$nextTick(() => {
+        if (this.currentLyric) {
+          this.currentLyric.stop()
+        }
+        setTimeout(() => {
           this.$refs.audio.play()
           this.getLyric()
-        })
+        }, 1000)
       },
       playing(newPlaying) {
         this.$nextTick(() => {
@@ -186,19 +193,26 @@
       loop() {
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
+        if (this.currentLyric) {
+          this.currentLyric.seek(0)
+        }
       },
       next() {
         if (!this.songReady) {
           return
         }
-        let index = this.currentIndex + 1
-        if (index === this.playList.length) {
-          index = 0
-        }
-        this.setCurrentIndex(index)
-        this.setCsong(this.playList[index])
-        if (!this.playing) {
-          this.togglePlay()
+        if (this.playList.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex + 1
+          if (index === this.playList.length) {
+            index = 0
+          }
+          this.setCurrentIndex(index)
+          this.setCsong(this.playList[index])
+          if (!this.playing) {
+            this.togglePlay()
+          }
         }
         this.songReady = false
       },
@@ -206,14 +220,18 @@
         if (!this.songReady) {
           return
         }
-        let index = this.currentIndex - 1
-        if (index <= 0) {
-          index = this.playList.length - 1
-        }
-        this.setCurrentIndex(index)
-        this.setCsong(this.playList[index])
-        if (!this.playing) {
-          this.togglePlay()
+        if (this.playList.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex - 1
+          if (index <= 0) {
+            index = this.playList.length - 1
+          }
+          this.setCurrentIndex(index)
+          this.setCsong(this.playList[index])
+          if (!this.playing) {
+            this.togglePlay()
+          }
         }
         this.songReady = false
       },
@@ -250,6 +268,10 @@
           if (this.playing) {
             this.currentLyric.play()
           }
+        }).catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
         })
       },
       handleLyric({lineNum, txt}) {
@@ -260,6 +282,7 @@
         } else {
           this.$refs.lyricList.scrollToElement(0, 0)
         }
+        this.playingLyric = txt
       },
       middleTouchStart(e) {
         this.touch.initiated = true
@@ -331,6 +354,9 @@
         if (!this.playing) {
           this.togglePlay()
         }
+        if (this.currentLyric) {
+          this.currentLyric.seek(currentTime * 1000)
+        }
       },
       ready() {
         this.songReady = true
@@ -385,6 +411,9 @@
           return
         }
         this.setPlayingState(!this.playing)
+        if (this.currentLyric) {
+          this.currentLyric.togglePlay()
+        }
       },
       _getPosAndScale() {
         const targetWidth = 40

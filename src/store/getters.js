@@ -13,3 +13,5 @@ export const mode = state => state.mode
 export const currentIndex = state => state.currentIndex
 
 export const cSong = state => state.cSong
+
+export const disc = state => state.disc

@@ -33,6 +33,9 @@ const mutations = {
   [types.SET_C_SONG](state, song) {
    // state.cSong = song
     Vue.set(state, 'cSong', song)
+  },
+  [types.SET_DISC](state, disc) {
+    Vue.set(state, 'disc', disc)
   }
 }
 

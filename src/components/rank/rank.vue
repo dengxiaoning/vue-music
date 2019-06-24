@@ -1,37 +1,105 @@
 <template>
-  <div class="rank">排名
-    <div id="todo-list-example"><input v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo">
+  <div class="rank" ref="rank">
+    <scroll :data="topList" class="toplist" ref="toplist">
       <ul>
-        <li is="todo-item" v-for="(todo, index) in todos" v-bind:title="todo" :key="index"
-            v-on:remove="todos.splice(index, 1)"></li>
+        <li class="item" v-for="(item,index) in topList" :key="index">
+          <div class="icon">
+            <img width="100" height="100" v-lazy="item.picUrl"/>
+          </div>
+          <ul class="songlist">
+            <li class="song" v-for="(song,index) in item.songList" :key="index">
+              <span>{{index}}</span>
+              <span>{{song.songname}} - {{song.singername}}</span>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </div>
+      <div class="loading-container" v-show="!topList.length">
+        <loading></loading>
+      </div>
+    </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Vue from 'vue'
+  import {getTopList} from '@/api/rank'
+  import {ERR_OK} from '@/api/config'
+  import Scroll from '@/base/scroll/scroll'
+  import Loading from '@/base/load/load'
+  import {playlistMixin} from '@/common/js/mixin'
 
-  Vue.component('todo-item', {
-    template: ' <li>{{ title }} <button v-on:click="$emit(\'remove\')">X</button></li>',
-    props: ['title']
-  })
   export default {
+    mixins: [playlistMixin],
+    created() {
+      this._getTopList()
+    },
     data() {
       return {
-        newTodoText: '',
-        todos: ['Do the dishes', 'Take out the trash', 'Mow the lawn']
+        topList: []
       }
     },
     methods: {
-      addNewTodo() {
-        this.todos.push(this.newTodoText)
-        this.newTodoText = ''
+      handlePlaylist(playlist) {
+        const bottom = playlist && playlist.length ? '60px' : ''
+        this.$refs.rank.style.bottom = bottom
+        this.$refs.toplist.refresh()
+      },
+      _getTopList() {
+        getTopList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.topList = res.data.topList
+          }
+        })
       }
+    },
+    components: {
+      Scroll,
+      Loading
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "~@/common/stylus/variable"
+  @import "~@/common/stylus/mixin"
 
+  .rank
+    position: fixed
+    width: 100%
+    top: 88px
+    bottom: 0
+    .toplist
+      height: 100%
+      overflow: hidden
+      .item
+        display: flex
+        margin: 0 20px
+        padding-top: 20px
+        height: 100px
+        &:last-child
+          padding-bottom: 20px
+        .icon
+          flex: 0 0 100px
+          width: 100px
+          height: 100px
+        .songlist
+          flex: 1
+          display: flex
+          flex-direction: column
+          justify-content: center
+          padding: 0 20px
+          height: 100px
+          overflow: hidden
+          background: $color-highlight-background
+          color: $color-text-d
+          font-size: $font-size-small
+          .song
+            no-wrap()
+            line-height: 26px
+      .loading-container
+        position: absolute
+        width: 100%
+        top: 50%
+        transform: translateY(-50%)
 </style>

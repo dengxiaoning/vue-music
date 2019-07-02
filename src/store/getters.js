@@ -15,3 +15,5 @@ export const currentIndex = state => state.currentIndex
 export const cSong = state => state.cSong
 
 export const disc = state => state.disc
+
+export const topList = state => state.topList

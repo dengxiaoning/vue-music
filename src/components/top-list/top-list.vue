@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :title="title" :bgImage="bgImage" :songs="songs"></music-list>
+    <music-list :title="title" :rank="rank" :bgImage="bgImage" :songs="songs"></music-list>
   </transition>
 </template>
 
@@ -15,7 +15,8 @@
   export default {
     data() {
       return {
-        songs: []
+        songs: [],
+        rank: true
       }
     },
     components: {
@@ -39,18 +40,21 @@
       _normalizeSongs(list) {
         let ret = []
         list.forEach((item) => {
-          if (item.data.songid && item.data.albummid) {
+          const musicData = item.data
+          if (musicData.songid && musicData.albummid) {
             // 传入songmid 查询获取 vkey
-            getMusicBySongmid(item.data.songmid).then(res => {
+            getMusicBySongmid(musicData.songmid).then(res => {
               if (res.code === ERR_OK) {
                 const svkey = res.data.items
                 const songVkey = svkey[0].vkey
                 const filename = svkey[0].filename
-                const newSong = createSong(item.data, filename, songVkey)
+                const newSong = createSong(musicData, filename, songVkey)
                 ret.push(newSong)
               } else {
                 console.log('查询 svkey  错误！')
               }
+            }).catch(err => {
+              console.log(err)
             })
           }
         })

@@ -74,7 +74,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             },
             params: req.query
           }).then((response) => {
-            res.json(response.data)
+              res.json(response.data)
           }).catch((e) => {
             console.log('错误日志')
             console.log(e)

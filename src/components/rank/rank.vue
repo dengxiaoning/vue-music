@@ -71,7 +71,7 @@
   }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus" scoped>
   @import "~@/common/stylus/variable"
   @import "~@/common/stylus/mixin"
 

@@ -53,5 +53,7 @@ export function getMusicBySongmid(songmid) {
     params: data
   }).then((res) => {
     return Promise.resolve(res.data)
+  }).catch(err => {
+    return Promise.reject(err)
   })
 }

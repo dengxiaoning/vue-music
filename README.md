@@ -145,6 +145,11 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
   commit(types.SET_PLAY_MODE, playMode.sequence)
 ```
 
+* 9 发现一个css 冲突的问题【在榜单页面 -> 榜单详情页面】 其中 的排名icon一直固定在某一行，奇怪的是v-for打印的为什么只有一个地方显示了icon
+![运行图片](static/imgs/rankException.png "运行如图")
+![css添加scoped](static/imgs/rankException2.png "修改如图")
+![css添加scoped](static/imgs/rankException3.png "修改如图")
+![运行正常](static/imgs/rankOK.png "正常如图")
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|

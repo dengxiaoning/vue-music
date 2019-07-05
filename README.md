@@ -24,7 +24,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ###### 运行效果图
 <table>
     <tr>
-        <td ><center><img src="static/imgs/vmusic01.png" >推荐页面</center></td>
+        <td ><center><img src="static/imgs/vmusic.png" >推荐页面</center></td>
         <td ><center><img src="static/imgs/vmusic2.png" >推荐页面</center></td>
         <td ><center><img src="static/imgs/vmusic3.png" >推荐页面</center></td>
         <td ><center><img src="static/imgs/vmusic4.png" >推荐页面</center></td>

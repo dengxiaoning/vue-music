@@ -146,10 +146,16 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
 ```
 
 * 9 发现一个css 冲突的问题【在榜单页面 -> 榜单详情页面】 其中 的排名icon一直固定在某一行，奇怪的是v-for打印的为什么只有一个地方显示了icon
-![运行图片](static/imgs/rankException.png "运行如图")
-![css添加scoped](static/imgs/rankException2.png "修改如图")
-![css添加scoped](static/imgs/rankException3.png "修改如图")
-![运行正常](static/imgs/rankOK.png "正常如图")
+最后经浏览器调试发现是同名的class 未限制作用域造成的
+<table>
+    <tr>
+        <td ><center><img src="static/imgs/rankException.png" >ico 位置异常</center></td>
+        <td ><center><img src="static/imgs/rankException2.png"  >song-list.vue添加 scoped</center></td>
+        <td><center><img src="static/imgs/rankException3.png"  >rank.vue添加 scoped</center></td>
+        <td ><center><img src="static/imgs/rankOK.png"  >运行正常了</center> </td>
+    </tr>
+</table>
+
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|

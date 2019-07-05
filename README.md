@@ -20,6 +20,30 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 ***
+---
+###### 运行效果图
+<table>
+    <tr>
+        <td ><center><img src="static/imgs/vmusic1.png" >推荐页面</center></td>
+        <td ><center><img src="static/imgs/vmusic2.png" >推荐页面</center></td>
+        <td ><center><img src="static/imgs/vmusic3.png" >推荐页面</center></td>
+        <td ><center><img src="static/imgs/vmusic4.png" >推荐页面</center></td>
+    </tr>
+    <tr>
+        <td ><center><img src="static/imgs/vmusic5.png" >歌手页面</center></td>
+        <td ><center><img src="static/imgs/vmusic6.png" >歌手页面</center></td>
+        <td ><center><img src="static/imgs/vmusic7.png" >歌手页面</center></td>
+        <td ><center><img src="static/imgs/vmusic8.png" >歌手页面</center></td>
+    </tr>
+    <tr>
+        <td ><center><img src="static/imgs/vmusic9.png" >榜单页面</center></td>
+        <td ><center><img src="static/imgs/vmusic10.png" >榜单页面</center></td>
+        <td ><center><img src="static/imgs/vmusic11.png" >榜单页面</center></td>
+        <td ><center><img src="static/imgs/vmusic12.png" >榜单页面</center></td>
+    </tr>
+</table>
+
+---
 ### 开发中的一些问题
 ###### (注意：有些歌手的歌曲或某几首歌曲可能无法播放，因为无法获取vkey，如：周杰伦【其他的目前没有发现】)
 * 1 使用vuex 进行 项目状态管理  （问题：在页面使用 computed进行 ...mapGetter 数据获取，在state 中数据发生改变时同步更新组件）

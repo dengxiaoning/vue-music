@@ -39,6 +39,11 @@ const mutations = {
   },
   [types.SET_TOP_LIST](state, topList) {
     Vue.set(state, 'topList', topList)
+  },
+  [types.SET_PLAYLIST_URL](state, keyUrl) {
+    let index = keyUrl.index
+    let url = keyUrl.url
+    state.playList[index].url = url
   }
 }
 

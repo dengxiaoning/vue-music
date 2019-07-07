@@ -11,6 +11,19 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 const axios = require('axios')
 
+// 添加一个请求拦截器，用于设置请求过渡状态
+axios.interceptors.request.use((config) => {
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// 添加一个返回拦截器
+axios.interceptors.response.use((response) => {
+  return response;
+}, (error) => {
+  return Promise.reject(error);
+});
 const express = require('express')
 const app = express()
 const apiRouter = express.Router()
@@ -80,6 +93,20 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             console.log(e)
           })
         }),
+        app.get('/api/getplaysongvkey', function (req, res) { // 获取vkey
+          var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+          axios.get(url, {
+            headers: {
+              origin: 'https://y.qq.com',
+              referer: 'https://y.qq.com/portal/player.html'
+            },
+            params: req.query
+          }).then((response) => {
+            res.json(response.data)
+          }).catch((e)=>{
+            console.log(e)
+          })
+        }),
         app.get('/api/lyric', (req, res) => {
           var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
           axios.get(url, {
@@ -97,6 +124,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }),
         app.get('/api/getSongList', (req, res) => {
           var url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+          axios.get(url, {
+            headers: {
+              referer: 'https://c.y.qq.com/',
+              host: 'c.y.qq.com'
+            },
+            params: req.query
+          }).then((response) => {
+            var ret = response.data
+            res.json(ret)
+          }).catch((e) => {
+            console.log('错误日志')
+            console.log(e)
+          })
+        }),
+        app.get('/api/suggestSearch', (req, res) => {
+          var url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
           axios.get(url, {
             headers: {
               referer: 'https://c.y.qq.com/',

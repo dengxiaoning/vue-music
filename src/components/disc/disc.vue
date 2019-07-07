@@ -7,10 +7,10 @@
 <script type="text/ecmascript-6">
   import MusicList from '@/components/music-list/music-list'
   import {mapGetters} from 'vuex'
-  import {getMusicBySongmid} from '@/api/singer'
+  // import {getMusicBySongmid} from '@/api/singer'
   import {getSongList} from '@/api/recommend'
   import {ERR_OK} from '@/api/config'
-  import {createSong} from '@/common/js/song'
+  import {createSongNew} from '@/common/js/song'
   export default {
     data() {
       return {
@@ -44,22 +44,31 @@
           }
         })
       },
+      // _normalizeSongs(list) {
+      //   let ret = []
+      //   list.forEach((musicData) => {
+      //     if (musicData.songid && musicData.albummid) {
+      //       // 传入songmid 查询获取 vkey
+      //       getMusicBySongmid(musicData.songmid).then(res => {
+      //         if (res.code === ERR_OK) {
+      //           const svkey = res.data.items
+      //           const songVkey = svkey[0].vkey
+      //           const filename = svkey[0].filename
+      //           const newSong = createSong(musicData, filename, songVkey)
+      //           ret.push(newSong)
+      //         } else {
+      //           console.log('查询 svkey  错误！')
+      //         }
+      //       })
+      //     }
+      //   })
+      //   return ret
+      // },
       _normalizeSongs(list) {
         let ret = []
         list.forEach((musicData) => {
           if (musicData.songid && musicData.albummid) {
-            // 传入songmid 查询获取 vkey
-            getMusicBySongmid(musicData.songmid).then(res => {
-              if (res.code === ERR_OK) {
-                const svkey = res.data.items
-                const songVkey = svkey[0].vkey
-                const filename = svkey[0].filename
-                const newSong = createSong(musicData, filename, songVkey)
-                ret.push(newSong)
-              } else {
-                console.log('查询 svkey  错误！')
-              }
-            })
+            ret.push(createSongNew(musicData))
           }
         })
         return ret

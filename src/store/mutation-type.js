@@ -17,3 +17,5 @@ export const SET_C_SONG = 'SET_C_SONG'
 export const SET_DISC = 'SET_DISC'
 
 export const SET_TOP_LIST = 'SET_TOP_LIST'
+
+export const SET_PLAYLIST_URL = 'SET_PLAYLIST_URL'

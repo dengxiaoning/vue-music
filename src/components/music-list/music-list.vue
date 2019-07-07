@@ -31,8 +31,9 @@
   import SongList from '@/base/song-list/song-list'
   import {prefixStyle} from '@/common/js/dom'
   import loading from '@/base/load/load'
-  import {mapActions} from 'vuex'
+  import {mapActions, mapMutations} from 'vuex'
   import {playlistMixin} from '@/common/js/mixin'
+  import {getplaysongvkey} from '@/api/singer'
 
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -89,6 +90,13 @@
         this.$router.back()
       },
       selectItem(item, index) {
+        getplaysongvkey(item.mid).then((vkey) => {
+          let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+          this.setPlaylistUrl({
+            index,
+            url
+          })
+        })
         this.selectPlay({
           list: this.songs,
           index: index
@@ -99,6 +107,9 @@
           list: this.songs
         })
       },
+      ...mapMutations({
+        setPlaylistUrl: 'SET_PLAYLIST_URL'
+      }),
       ...mapActions([
         'selectPlay',
         'randomPlay'

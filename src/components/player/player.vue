@@ -111,6 +111,7 @@
   import {shuffle} from '@/common/js/util'
   import Lyric from 'lyric-parser'
   import Scroll from '@/base/scroll/scroll'
+  import {getplaysongvkey} from '@/api/singer'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -176,6 +177,15 @@
       }
     },
     methods: {
+      _setVKey(playlist, index) {
+        getplaysongvkey(playlist.mid).then((vkey) => {
+          let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+          this.setPlaylistUrl({
+            index,
+            url
+          })
+        })
+      },
       back() {
         //  console.log('click of children ...')
         this.setFullScreen(false)
@@ -210,6 +220,7 @@
           }
           this.setCurrentIndex(index)
           this.setCsong(this.playList[index])
+          this._setVKey(this.playList[index], index)
           if (!this.playing) {
             this.togglePlay()
           }
@@ -229,6 +240,7 @@
           }
           this.setCurrentIndex(index)
           this.setCsong(this.playList[index])
+          this._setVKey(this.playList[index], index)
           if (!this.playing) {
             this.togglePlay()
           }
@@ -434,7 +446,8 @@
         setCurrentIndex: 'SET_CURRENT_INDEX',
         setCsong: 'SET_C_SONG',
         setPlayMode: 'SET_PLAY_MODE',
-        setPlayList: 'SET_PLAYLIST'
+        setPlayList: 'SET_PLAYLIST',
+        setPlaylistUrl: 'SET_PLAYLIST_URL'
       })
     },
     components: {

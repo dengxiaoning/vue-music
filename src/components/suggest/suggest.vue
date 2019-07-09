@@ -22,13 +22,13 @@
 <script type="text/ecmascript-6">
   import {search} from '@/api/search'
   import {ERR_OK} from '@/api/config'
-  import {createSong} from '@/common/js/song'
+  import {createSongNew} from '@/common/js/song'
   // import {getMusicBySongmid} from '@/api/singer'
   import Scroll from '@/base/scroll/scroll'
   import Load from '@/base/load/load'
   import Singer from '@/common/js/singer'
-  import {mapMutations} from 'vuex'
-
+  import {mapMutations, mapActions} from 'vuex'
+  import {getplaysongvkey} from '@/api/singer'
   const TYPE_SINGER = 'singer'
   const perpage = 30
   export default {
@@ -93,6 +93,13 @@
             path: `/search/${singer.id}`
           })
           this.setSinger(singer)
+        } else {
+          // 为歌曲获取url
+          getplaysongvkey(item.mid).then((vkey) => {
+            let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+            this.$set(item, 'url', url)
+            this.insertSong(item)
+          })
         }
       },
       getIconCls(item) {
@@ -154,14 +161,17 @@
         let ret = []
         list.forEach((musicData) => {
           if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
+            ret.push(createSongNew(musicData))
           }
         })
         return ret
       },
       ...mapMutations({
         setSinger: 'SET_SINGER'
-      })
+      }),
+      ...mapActions([
+        'insertSong'
+      ])
     },
     watch: {
       query() {

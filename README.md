@@ -41,6 +41,12 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
         <td ><center><img src="static/imgs/vmusic11.png" >榜单页面</center></td>
         <td ><center><img src="static/imgs/vmusic12.png" >榜单页面</center></td>
     </tr>
+    <tr>
+        <td ><center><img src="static/imgs/vmusic13.png" >搜索页面</center></td>
+        <td ><center><img src="static/imgs/vmusic14.png" >搜索页面</center></td>
+        <td ><center><img src="static/imgs/vmusic15.png" >搜索页面</center></td>
+        <td ><center><img src="static/imgs/vmusic16.png" >搜索页面</center></td>
+    </tr>
 </table>
 
 ---

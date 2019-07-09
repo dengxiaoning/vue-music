@@ -8,6 +8,8 @@ import store from './store'
 import '@/common/stylus/index.styl'
 import fastclick from 'fastclick'
 import VueLazyLoad from 'vue-lazyload'
+import showmsg from './base/message/message'
+Vue.prototype.$message = showmsg
 fastclick.attach(document.body)
 Vue.use(VueLazyLoad, {
   loading: require('./common/image/default.png')

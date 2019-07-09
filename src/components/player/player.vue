@@ -374,6 +374,11 @@
         this.songReady = true
       },
       error() {
+        this.$message({
+          text: '当前歌曲无法播放，请选择下一首！',
+          type: 'warning',
+          duration: 3000
+        })
         this.songReady = true
       },
       enter(el, done) {

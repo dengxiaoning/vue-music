@@ -44,6 +44,9 @@ const mutations = {
     let index = keyUrl.index
     let url = keyUrl.url
     state.playList[index].url = url
+  },
+  [types.SET_SEARCH_HISTORY](state, history) {
+    state.searchHistory = history
   }
 }
 

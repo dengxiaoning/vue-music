@@ -2,6 +2,8 @@
   <Scroll class="suggest"
           :data="result"
           :pullup="pullup"
+          :beforeScroll="beforeScroll"
+          @beforeScroll="listScroll"
           @scrollToEnd="searchMore"
           ref="suggest">
     <ul class="suggest-list">
@@ -16,6 +18,9 @@
       </li>
       <load v-show="hasMore" title=""></load>
     </ul>
+    <div v-show="!hasMore && !result.length" class="no-result-wrapper">
+      <no-result title="抱歉没有搜索结果！"></no-result>
+    </div>
   </Scroll>
 </template>
 
@@ -29,6 +34,8 @@
   import Singer from '@/common/js/singer'
   import {mapMutations, mapActions} from 'vuex'
   import {getplaysongvkey} from '@/api/singer'
+  import noResult from '@/base/no-result/no-result'
+
   const TYPE_SINGER = 'singer'
   const perpage = 30
   export default {
@@ -48,7 +55,8 @@
         result: [],
         getresult: {},
         pullup: true,
-        hasMore: true
+        hasMore: true,
+        beforeScroll: true
       }
     },
     methods: {
@@ -101,6 +109,7 @@
             this.insertSong(item)
           })
         }
+        this.$emit('select')
       },
       getIconCls(item) {
         if (item.type === TYPE_SINGER) {
@@ -169,6 +178,9 @@
       ...mapMutations({
         setSinger: 'SET_SINGER'
       }),
+      listScroll() {
+        this.$emit('listScroll')
+      },
       ...mapActions([
         'insertSong'
       ])
@@ -185,7 +197,8 @@
     },
     components: {
       Scroll,
-      Load
+      Load,
+      noResult
     }
   }
 </script>

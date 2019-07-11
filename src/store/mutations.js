@@ -46,7 +46,8 @@ const mutations = {
     state.playList[index].url = url
   },
   [types.SET_SEARCH_HISTORY](state, history) {
-    state.searchHistory = history
+   // state.searchHistory = history
+    Vue.set(state, 'searchHistory', history)
   }
 }
 

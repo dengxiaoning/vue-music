@@ -19,10 +19,10 @@
     },
     computed: {
       title() {
-        return this.singer.name
+        return this.singer && this.singer.name
       },
       bgImage() {
-        return this.singer.avatar
+        return this.singer && this.singer.avatar
       },
       ...mapGetters([ // 获取的值始终未更新，一直是第一次传入的值？？？
         'singer'
@@ -34,7 +34,7 @@
     },
     methods: {
       _getDetail() {
-        if (!this.singer.id) {
+        if (!this.singer || !this.singer.id) {
           this.$router.push('/singer')
           return
         }

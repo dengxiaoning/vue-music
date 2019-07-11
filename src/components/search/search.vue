@@ -13,6 +13,15 @@
             </li>
           </ul>
         </div>
+        <div class="search-history" v-show="searchHistory && searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear" @click="clearSearchHistory">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list :searches="searchHistory" @select="addQuery" @delete="deleteSearchHistory"></search-list>
+        </div>
       </div>
     </div>
     <div class="search-result" v-show="query">
@@ -27,7 +36,8 @@
   import {getHotKey} from '@/api/search'
   import {ERR_OK} from '@/api/config'
   import Suggest from '@/components/suggest/suggest'
-  import {mapActions} from 'vuex'
+  import SearchList from '@/base/search-list/search-list'
+  import {mapActions, mapGetters, mapMutations} from 'vuex'
 
   export default {
     data() {
@@ -36,9 +46,15 @@
         query: ''
       }
     },
+    computed: {
+      ...mapGetters([
+        'searchHistory'
+      ])
+    },
     components: {
       SearchBox,
-      Suggest
+      Suggest,
+      SearchList
     },
     methods: {
       addQuery(query) {
@@ -61,11 +77,21 @@
         })
       },
       ...mapActions([
-        'saveSearchHistory'
-      ])
+        'saveSearchHistory',
+        'deleteSearchHistory',
+        'clearSearchHistory'
+      ]),
+      ...mapMutations({
+        setSearchHistory: 'SET_SEARCH_HISTORY'
+      })
     },
     created() {
       this._geHotKey()
+      // 判断searchHistory是否已经有值,如果有就提交到mutation,【解决localhost中有数据，但是历史列表无显示问题】
+      let sHistory = this.$store.state.default.searchHistory
+      if (sHistory && sHistory.length > 0) {
+        this.setSearchHistory(sHistory)
+      }
     }
   }
 </script>

@@ -178,6 +178,9 @@
       ...mapMutations({
         setSinger: 'SET_SINGER'
       }),
+      refresh() {
+        this.$refs.suggest.refresh()
+      },
       listScroll() {
         this.$emit('listScroll')
       },

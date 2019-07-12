@@ -11,14 +11,14 @@
         </div>
         <scroll ref="listContent" :dat="sequenceList" class="list-content">
           <ul>
-            <li class="item" v-for="(item,index) in sequenceList" :key="index"
+            <li ref="listItem" class="item" v-for="(item,index) in sequenceList" :key="index"
                 @click="selectItem(item,index)">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
                 <i class="icon-not-favorite"></i>
               </span>
-              <span class="delete">
+              <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon-delete"></i>
               </span>
             </li>
@@ -39,7 +39,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import {getplaysongvkey} from '@/api/singer'
   import {playMode} from '@/common/js/config'
   import Scroll from '@/base/scroll/scroll'
 
@@ -54,6 +55,7 @@
         this.showFlag = true
         setTimeout(() => {
           this.$refs.listContent.refresh()
+          this.scrollToCurrent(this.cSong)
         }, 20)
       },
       hide() {
@@ -67,17 +69,59 @@
       },
       selectItem(item, index) {
         if (this.mode === playMode.random) {
-          this.setCurrentIndex(index)
+          index = this.playList.findIndex((song) => {
+            return song.id === item.id
+          })
+          item = this.playList[index] // 获取随机播放的song
         }
+        this.setCurrentIndex(index)
+        this._setVKey(item, index)
+        this.setPlayingState(true)
       },
-      ...mapActions({
-        setCurrentIndex: 'SET_CURRENT_INDEX'
-      })
+      scrollToCurrent(current) {
+        const index = this.sequenceList.findIndex((song) => {
+          return current.id === song.id
+        })
+        this.$refs.listContent.scrollToElement(
+          this.$refs.listItem[index], 300)
+      },
+      _setVKey(item, index) {
+        // 为歌曲获取url
+        getplaysongvkey(item.mid).then((vkey) => {
+          let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+          this.setCSong(item)
+          this.setPlaylistUrl({
+            index,
+            url
+          })
+        })
+      },
+      deleteOne(item) {
+        this.deleteSong(item)
+      },
+      ...mapMutations({
+        setPlaylistUrl: 'SET_PLAYLIST_URL',
+        setCurrentIndex: 'SET_CURRENT_INDEX',
+        setCSong: 'SET_C_SONG',
+        setPlayingState: 'SET_PLAYING_STATE'
+      }),
+      ...mapActions([
+        'deleteSong'
+      ])
+    },
+    watch: {
+      cSong(newSong, oldSong) {
+        if (!this.showFlag || newSong.id === oldSong.id) {
+          return
+        }
+        this.scrollToCurrent(newSong)
+      }
     },
     computed: {
       ...mapGetters([
         'sequenceList',
         'cSong',
+        'mode',
         'playList'
       ])
     },

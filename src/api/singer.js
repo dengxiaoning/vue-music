@@ -87,5 +87,7 @@ export function getplaysongvkey(songmid) {
     params: data
   }).then((res) => {
     return Promise.resolve(res.data.req_0.data.midurlinfo[0].purl)
+  }).catch(() => {
+    console.log('获取歌词异常！！！')
   })
 }

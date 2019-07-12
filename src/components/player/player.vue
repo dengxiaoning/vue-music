@@ -90,7 +90,7 @@
             <i @click.stop="togglePlay" class="icon-mini" :class="miniIcon"></i>
           </progress-circle>
         </div>
-        <div class="control" @click="showPlaylist">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
@@ -162,14 +162,18 @@
       this.touch = {}
     },
     watch: {
-      cSong() {
+      cSong(val) {
         if (this.currentLyric) {
           this.currentLyric.stop()
         }
-        setTimeout(() => {
-          this.$refs.audio.play()
-          this.getLyric()
-        }, 1000)
+        if (!val.url) {
+          this._setVKey(val, this.currentIndex)
+        } else {
+          setTimeout(() => {
+            this.$refs.audio.play()
+            this.getLyric()
+          }, 1000)
+        }
       },
       playing(newPlaying) {
         this.$nextTick(() => {
@@ -179,14 +183,42 @@
       }
     },
     methods: {
+      _promiseSetVKey(playlist) {
+        return new Promise((resolve, reject) => {
+          getplaysongvkey(playlist.mid).then((vkey) => {
+            let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+            if (vkey) {
+              resolve(url)
+            } else {
+              reject(new Error('null'))
+            }
+          })
+        })
+      },
       _setVKey(playlist, index) {
-        getplaysongvkey(playlist.mid).then((vkey) => {
-          let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+        this._promiseSetVKey(playlist).then((url) => {
           this.setPlaylistUrl({
             index,
             url
           })
+          setTimeout(() => {
+            this.$refs.audio.play()
+            this.getLyric()
+          }, 1000)
+        }).catch(() => {
+          this.$message({
+            text: '当前歌曲无法播放，请选择下一首！',
+            type: 'warning',
+            duration: 3000
+          })
         })
+        // getplaysongvkey(playlist.mid).then((vkey) => {
+        //   let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+        //   this.setPlaylistUrl({
+        //     index,
+        //     url
+        //   })
+        // })
       },
       showPlaylist() {
         this.$refs.playlist.show()

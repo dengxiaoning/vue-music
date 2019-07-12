@@ -81,7 +81,7 @@
     },
     methods: {
       handlePlaylist(playlist) {
-        const bottom = playlist.length > 0 ? '60px' : ''
+        const bottom = playlist && playlist.length > 0 ? '60px' : ''
         this.$refs.shortcutWrapper.style.bottom = bottom
         this.$refs.shortcut.refresh()
         this.$refs.searchResult.style.bottom = bottom

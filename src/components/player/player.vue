@@ -90,11 +90,12 @@
             <i @click.stop="togglePlay" class="icon-mini" :class="miniIcon"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <play-list ref="playlist"></play-list>
     <audio ref="audio" :src="cSong.url"
            @canplay="ready" @error="error"
            @timeupdate="updateTime" @ended="end"></audio>
@@ -112,6 +113,7 @@
   import Lyric from 'lyric-parser'
   import Scroll from '@/base/scroll/scroll'
   import {getplaysongvkey} from '@/api/singer'
+  import PlayList from '@/components/playlist/playlist'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -185,6 +187,9 @@
             url
           })
         })
+      },
+      showPlaylist() {
+        this.$refs.playlist.show()
       },
       back() {
         //  console.log('click of children ...')
@@ -458,7 +463,8 @@
     components: {
       ProgressBar,
       ProgressCircle,
-      Scroll
+      Scroll,
+      PlayList
     }
   }
 </script>

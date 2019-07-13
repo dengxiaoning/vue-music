@@ -6,12 +6,12 @@
           <h1 class="title">
             <i class="icon"></i>
             <span class="text"></span>
-            <span class="clear"><i class="icon-clear"></i></span>
+            <span class="clear" @click="showConfirm"><i class="icon-clear"></i></span>
           </h1>
         </div>
         <scroll ref="listContent" :dat="sequenceList" class="list-content">
-          <ul>
-            <li ref="listItem" class="item" v-for="(item,index) in sequenceList" :key="index"
+          <transition-group name="list" tag="ul">
+            <li ref="listItem" class="item" v-for="(item,index) in sequenceList" :key="item.id"
                 @click="selectItem(item,index)">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
@@ -22,7 +22,7 @@
                 <i class="icon-delete"></i>
               </span>
             </li>
-          </ul>
+          </transition-group>
         </scroll>
         <div class="list-operate">
           <div class="add">
@@ -34,6 +34,9 @@
           <span>关闭</span>
         </div>
       </div>
+      <confirm ref="confirm" text="是否清空播放列表"
+               confirmBtnText="清空"
+               @confirm="confirmClear"></confirm>
     </div>
   </transition>
 </template>
@@ -43,6 +46,7 @@
   import {getplaysongvkey} from '@/api/singer'
   import {playMode} from '@/common/js/config'
   import Scroll from '@/base/scroll/scroll'
+  import Confirm from '@/base/confirm/confirm'
 
   export default {
     data() {
@@ -76,6 +80,7 @@
         }
         this.setCurrentIndex(index)
         this._setVKey(item, index)
+        // this.setCSong(item)
         this.setPlayingState(true)
       },
       scrollToCurrent(current) {
@@ -98,6 +103,16 @@
       },
       deleteOne(item) {
         this.deleteSong(item)
+        if (!this.playList.length) {
+          this.hide()
+        }
+      },
+      showConfirm() {
+        this.$refs.confirm.show()
+      },
+      confirmClear() {
+        this.deleteSongList()
+        this.hide()
       },
       ...mapMutations({
         setPlaylistUrl: 'SET_PLAYLIST_URL',
@@ -106,12 +121,13 @@
         setPlayingState: 'SET_PLAYING_STATE'
       }),
       ...mapActions([
-        'deleteSong'
+        'deleteSong',
+        'deleteSongList'
       ])
     },
     watch: {
       cSong(newSong, oldSong) {
-        if (!this.showFlag || newSong.id === oldSong.id) {
+        if (!this.showFlag || !newSong || newSong.id === oldSong.id) {
           return
         }
         this.scrollToCurrent(newSong)
@@ -126,7 +142,8 @@
       ])
     },
     components: {
-      Scroll
+      Scroll,
+      Confirm
     }
   }
 </script>

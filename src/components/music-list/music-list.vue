@@ -33,7 +33,7 @@
   import loading from '@/base/load/load'
   import {mapActions, mapMutations} from 'vuex'
   import {playlistMixin} from '@/common/js/mixin'
-  import {getplaysongvkey} from '@/api/singer'
+ // import {getplaysongvkey} from '@/api/singer'
 
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -90,13 +90,13 @@
         this.$router.back()
       },
       selectItem(item, index) {
-        getplaysongvkey(item.mid).then((vkey) => {
-          let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
-          this.setPlaylistUrl({
-            index,
-            url
-          })
-        })
+        // getplaysongvkey(item.mid).then((vkey) => {
+        //   let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+        //   this.setPlaylistUrl({
+        //     index,
+        //     url
+        //   })
+        // })
         this.selectPlay({
           list: this.songs,
           index: index

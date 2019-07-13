@@ -6,7 +6,7 @@
                 @leave="leave"
                 @after-leave="afterLeave"
     >
-      <div class="normal-player" v-show="fullScreen">
+      <div class="normal-player"  v-show="fullScreen">
         <div class="background">
           <img width="100%" height="100%" :src="cSong.image"/>
         </div>
@@ -95,8 +95,8 @@
         </div>
       </div>
     </transition>
-    <play-list ref="playlist"></play-list>
-    <audio ref="audio" :src="cSong.url"
+    <play-list ref="playlistComponents"></play-list>
+    <audio ref="audio" :src="cSong && cSong.url"
            @canplay="ready" @error="error"
            @timeupdate="updateTime" @ended="end"></audio>
   </div>
@@ -162,12 +162,22 @@
       this.touch = {}
     },
     watch: {
-      cSong(val) {
+      cSong(newSong, oldSong) {
+        if (!newSong || !newSong.id) {
+          return
+        }
+        if (oldSong && newSong.id === oldSong.id) {
+          return
+        }
+
         if (this.currentLyric) {
           this.currentLyric.stop()
+          this.currentTime = 0
+          this.playingLyric = ''
+          this.currentLineNum = 0
         }
-        if (!val.url) {
-          this._setVKey(val, this.currentIndex)
+        if (!newSong.url) {
+          this._setVKey(newSong, this.currentIndex)
         } else {
           setTimeout(() => {
             this.$refs.audio.play()
@@ -221,7 +231,7 @@
         // })
       },
       showPlaylist() {
-        this.$refs.playlist.show()
+        this.$refs.playlistComponents.show()
       },
       back() {
         //  console.log('click of children ...')

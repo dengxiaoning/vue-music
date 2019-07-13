@@ -33,7 +33,7 @@
   import Load from '@/base/load/load'
   import Singer from '@/common/js/singer'
   import {mapMutations, mapActions} from 'vuex'
-  import {getplaysongvkey} from '@/api/singer'
+  // import {getplaysongvkey} from '@/api/singer'
   import noResult from '@/base/no-result/no-result'
 
   const TYPE_SINGER = 'singer'
@@ -102,12 +102,13 @@
           })
           this.setSinger(singer)
         } else {
+          this.insertSong(item)
           // 为歌曲获取url
-          getplaysongvkey(item.mid).then((vkey) => {
-            let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
-            this.$set(item, 'url', url)
-            this.insertSong(item)
-          })
+          // getplaysongvkey(item.mid).then((vkey) => {
+          //   let url = `http://dl.stream.qqmusic.qq.com/${vkey}`
+          //   this.$set(item, 'url', url)
+          //
+          // })
         }
         this.$emit('select')
       },

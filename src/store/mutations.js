@@ -15,12 +15,12 @@ const mutations = {
     Vue.set(state, 'fullScreen', flag)
   },
   [types.SET_PLAYLIST](state, list) {
-    state.playList = list
-    //  Vue.set(state, 'playList', list)
+   // state.playList = list
+    Vue.set(state, 'playList', list)
   },
   [types.SET_SEQUENCE_LIST](state, list) {
-    state.sequenceList = list
-    //  Vue.set(state, 'sequenceList', list)
+   // state.sequenceList = list
+     Vue.set(state, 'sequenceList', list)
   },
   [types.SET_PLAY_MODE](state, mode) {
     //  state.playMode = playMode

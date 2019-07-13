@@ -38,8 +38,8 @@ export const randomPlay = function ({commit, state}, {list}) {
 
 export const insertSong = function ({commit, state}, song) {
   if (state.playList) {
-    let playlist = state.playList
-    let sequenceList = state.sequenceList
+    let playlist = state.playList.slice()
+    let sequenceList = state.sequenceList.slice()
     let currentIndex = state.currentIndex
     // 记录当前歌曲
     let currentSong = playlist[currentIndex]
@@ -97,8 +97,8 @@ export const clearSearchHistory = function ({commit}) {
 }
 
 export const deleteSong = function ({commit, state}, song) {
-  let playlist = state.playList
-  let sequenceList = state.sequenceList
+  let playlist = state.playList.slice()
+  let sequenceList = state.sequenceList.slice()
   let currentIndex = state.currentIndex
   let pIndex = findIndex(playlist, song)
   playlist.splice(pIndex, 1)
@@ -113,6 +113,16 @@ export const deleteSong = function ({commit, state}, song) {
   commit(types.SET_C_SONG, playlist[currentIndex])
   commit(types.SET_CURRENT_INDEX, currentIndex)
   if (!playlist.length) {
+    commit(types.SET_C_SONG, {}) // 避免play.vue在当前无歌曲时出现undefined异常
     commit(types.SET_PLAYING_STATE, false)
+  } else {
+    commit(types.SET_PLAYING_STATE, true)
   }
+}
+
+export const deleteSongList = function ({commit}) {
+  commit(types.SET_PLAYLIST, [])
+  commit(types.SET_SEQUENCE_LIST, [])
+  commit(types.SET_CURRENT_INDEX, 0)
+  commit(types.SET_PLAYING_STATE, false)
 }

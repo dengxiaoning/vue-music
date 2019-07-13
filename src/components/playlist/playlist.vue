@@ -4,8 +4,8 @@
       <div class="list-wrapper" @click.stop>
         <div class="list-header">
           <h1 class="title">
-            <i class="icon"></i>
-            <span class="text"></span>
+            <i class="icon" :class="iconMode" @click="changeMode"></i>
+            <span class="text">{{modeText}}</span>
             <span class="clear" @click="showConfirm"><i class="icon-clear"></i></span>
           </h1>
         </div>
@@ -25,7 +25,7 @@
           </transition-group>
         </scroll>
         <div class="list-operate">
-          <div class="add">
+          <div class="add" @click="addSong">
             <i class="icon-add"></i>
             <span class="text">添加歌曲到队列</span>
           </div>
@@ -37,18 +37,22 @@
       <confirm ref="confirm" text="是否清空播放列表"
                confirmBtnText="清空"
                @confirm="confirmClear"></confirm>
+      <add-song ref="addSong"></add-song>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import {mapMutations, mapActions} from 'vuex'
   import {getplaysongvkey} from '@/api/singer'
   import {playMode} from '@/common/js/config'
   import Scroll from '@/base/scroll/scroll'
   import Confirm from '@/base/confirm/confirm'
+  import {playerMixin} from '@/common/js/mixin'
+  import AddSong from '@/components/add-song/add-song'
 
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         showFlag: false
@@ -72,11 +76,12 @@
         return ''
       },
       selectItem(item, index) {
+        // 如果为随机播放模式就得从playlist中去查询当前正在播放的song 的index
+        // (因为随机模式更改了playlist顺序，而当前组件使用 的sequencelist做展示,所以歌曲位置不相符)
         if (this.mode === playMode.random) {
           index = this.playList.findIndex((song) => {
             return song.id === item.id
           })
-          item = this.playList[index] // 获取随机播放的song
         }
         this.setCurrentIndex(index)
         this._setVKey(item, index)
@@ -118,8 +123,13 @@
         setPlaylistUrl: 'SET_PLAYLIST_URL',
         setCurrentIndex: 'SET_CURRENT_INDEX',
         setCSong: 'SET_C_SONG',
-        setPlayingState: 'SET_PLAYING_STATE'
+        setPlayingState: 'SET_PLAYING_STATE',
+        setPlayMode: 'SET_PLAY_MODE',
+        setPlayList: 'SET_PLAYLIST'
       }),
+      addSong() {
+        this.$refs.addSong.show()
+      },
       ...mapActions([
         'deleteSong',
         'deleteSongList'
@@ -134,16 +144,14 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'sequenceList',
-        'cSong',
-        'mode',
-        'playList'
-      ])
+      modeText() {
+        return this.mode === playMode.sequence ? '顺序播放' : this.mode === playMode.random ? '随机播放' : '单曲循环'
+      }
     },
     components: {
       Scroll,
-      Confirm
+      Confirm,
+      AddSong
     }
   }
 </script>

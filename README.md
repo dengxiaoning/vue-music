@@ -186,6 +186,18 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
     </tr>
 </table>
 
+* 10 如下code在歌曲播放组件和播放列表组件使用mixins 共享mapMutationsshif时异常报错!!!(不知道是否自己写错了)
+```
+    ...mapMutations({
+        setFullScreen: 'SET_FULL_SCREEN',
+        setPlayingState: 'SET_PLAYING_STATE',
+        setCurrentIndex: 'SET_CURRENT_INDEX',
+        setCsong: 'SET_C_SONG',
+        setPlayMode: 'SET_PLAY_MODE',
+        setPlayList: 'SET_PLAYLIST',
+        setPlaylistUrl: 'SET_PLAYLIST_URL'
+      })
+```
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|

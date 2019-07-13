@@ -110,12 +110,11 @@ export const deleteSong = function ({commit, state}, song) {
   }
   commit(types.SET_PLAYLIST, playlist)
   commit(types.SET_SEQUENCE_LIST, sequenceList)
-  commit(types.SET_C_SONG, playlist[currentIndex])
   commit(types.SET_CURRENT_INDEX, currentIndex)
   if (!playlist.length) {
-    commit(types.SET_C_SONG, {}) // 避免play.vue在当前无歌曲时出现undefined异常
     commit(types.SET_PLAYING_STATE, false)
   } else {
+    commit(types.SET_C_SONG, playlist[currentIndex])
     commit(types.SET_PLAYING_STATE, true)
   }
 }

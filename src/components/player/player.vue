@@ -6,7 +6,7 @@
                 @leave="leave"
                 @after-leave="afterLeave"
     >
-      <div class="normal-player"  v-show="fullScreen">
+      <div class="normal-player" v-show="fullScreen">
         <div class="background">
           <img width="100%" height="100%" :src="cSong.image"/>
         </div>
@@ -109,15 +109,17 @@
   import ProgressBar from '@/base/progress-bar/progress-bar'
   import ProgressCircle from '@/base/progress-circle/progress-circle'
   import {playMode} from '@/common/js/config'
-  import {shuffle} from '@/common/js/util'
+  // import {shuffle} from '@/common/js/util'
   import Lyric from 'lyric-parser'
   import Scroll from '@/base/scroll/scroll'
   import {getplaysongvkey} from '@/api/singer'
   import PlayList from '@/components/playlist/playlist'
+  import {playerMixin} from '@/common/js/mixin'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         songReady: false,
@@ -150,12 +152,8 @@
       },
       ...mapGetters([ // 获取值无法及时更新，一直是初始值？？？
         'fullScreen',
-        'playList',
-        'cSong',
         'playing',
-        'currentIndex',
-        'mode',
-        'sequenceList'
+        'currentIndex'
       ])
     },
     created() {
@@ -302,24 +300,6 @@
         const minute = interval / 60 | 0
         const second = this._pad(interval % 60)
         return `${minute}:${second}`
-      },
-      changeMode() {
-        const mode = (this.mode + 1) % 3
-        this.setPlayMode(mode)
-        let list = null
-        if (mode === playMode.random) {
-          list = shuffle(this.sequenceList)
-        } else {
-          list = this.sequenceList
-        }
-        this.resetCurrentIndex(list)
-        this.setPlayList(list)
-      },
-      resetCurrentIndex(list) {
-        let index = list.findIndex((item) => {
-          return item.id === this.cSong.id
-        })
-        this.setCurrentIndex(index)
       },
       getLyric() {
         this.cSong.getLyric().then((lyric) => {

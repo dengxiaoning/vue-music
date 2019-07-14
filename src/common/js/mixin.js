@@ -29,13 +29,18 @@ export const playlistMixin = {
 export const playerMixin = {
   computed: {
     iconMode() {
+      // 解决从 搜索页面进入 播放组件时，获取mode 为undefined问题
+      if (!this.mode) {
+        this.setPlayMode(playMode.sequence)
+      }
       return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
     },
     ...mapGetters([
       'sequenceList',
       'cSong',
       'mode',
-      'playList'
+      'playList',
+      'favoriteList'
     ])
   },
   methods: {
@@ -56,14 +61,46 @@ export const playerMixin = {
         return item.id === this.cSong.id
       })
       this.setCurrentIndex(index)
-    }
+    },
+    getFavoriteIcon(song) {
+      if (this.isFavorite(song)) {
+        return 'icon-favor'
+      }
+      return 'icon-not-favorite'
+    },
+    toggleFavorite(song) {
+      if (this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
+      } else {
+        this.saveFavoriteList(song)
+      }
+    },
+    isFavorite(song) {
+       console.log(this.favoriteList)
+      let index
+      if (this.favoriteList) {
+        index = this.favoriteList.findIndex((item) => {
+          return item.id === song.id
+        })
+        console.log(index)
+        return index > -1
+      } else {
+        console.log('false')
+        return false
+      }
+    },
+    ...mapActions([
+      'saveFavoriteList',
+      'deleteFavoriteList'
+    ])
   }
 }
 
 export const searchMixin = {
   data() {
     return {
-      query: ''
+      query: '',
+      refreshDelay: 100
     }
   },
   computed: {

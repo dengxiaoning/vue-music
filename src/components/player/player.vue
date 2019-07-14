@@ -70,6 +70,7 @@
               <i @click="next" class="icon-next" :class="disableCls"></i>
             </div>
             <div class="icon i-right">
+              <!--<i class="icon" @click.stop="toggleFavorite(cSong)" :class="getFavoriteIcon(cSong)"></i>-->
               <i class="icon icon-not-favorite"></i>
             </div>
           </div>
@@ -103,7 +104,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from '@/common/js/dom'
   import ProgressBar from '@/base/progress-bar/progress-bar'
@@ -146,9 +147,6 @@
       },
       percent() {
         return this.currentTime / this.cSong.duration
-      },
-      iconMode() {
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
       },
       ...mapGetters([ // 获取值无法及时更新，一直是初始值？？？
         'fullScreen',
@@ -399,6 +397,7 @@
       },
       ready() {
         this.songReady = true
+        this.savePlayHistory(this.cSong)
       },
       error() {
         this.$message({
@@ -480,7 +479,10 @@
         setPlayMode: 'SET_PLAY_MODE',
         setPlayList: 'SET_PLAYLIST',
         setPlaylistUrl: 'SET_PLAYLIST_URL'
-      })
+      }),
+      ...mapActions([
+        'savePlayHistory'
+      ])
     },
     components: {
       ProgressBar,

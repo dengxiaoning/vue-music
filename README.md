@@ -198,6 +198,17 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
         setPlaylistUrl: 'SET_PLAYLIST_URL'
       })
 ```
+* 11 使用` <i class="icon" @click.stop="toggleFavorite(cSong)" :class="getFavoriteIcon(cSong)"></i>`
+ 根据收藏数据显示不同的 icon 时出现该方法不停被调用
+<table>
+    <tr>
+        <td ><center><img src="static/imgs/favoriteProblem2.png" >css中添加监听方法</center></td>
+        <td ><center><img src="static/imgs/favoriteProblem3.png"  >mixin中定义该方法</center></td>
+        <td><center><img src="static/imgs/favoriteProblem4.png"  >运行时发现不停被调用</center></td>
+        <td ><center><img src="static/imgs/favoriteProblem5.png"  >转个弯，修改为监听favoriteList</center> </td>
+        <td ><center><img src="static/imgs/favoriteProblem6.png"  >运行终于正常了</center> </td>
+    </tr>
+</table>
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|

@@ -43,6 +43,15 @@ export const playerMixin = {
       'favoriteList'
     ])
   },
+  watch: {
+    favoriteList() {
+      if (this.isFavorite(this.cSong)) {
+        this.favoriteIcon = 'icon-favorite'
+      } else {
+        this.favoriteIcon = 'icon-not-favorite'
+      }
+    }
+  },
   methods: {
     changeMode() {
       const mode = (this.mode + 1) % 3
@@ -62,12 +71,6 @@ export const playerMixin = {
       })
       this.setCurrentIndex(index)
     },
-    getFavoriteIcon(song) {
-      if (this.isFavorite(song)) {
-        return 'icon-favor'
-      }
-      return 'icon-not-favorite'
-    },
     toggleFavorite(song) {
       if (this.isFavorite(song)) {
         this.deleteFavoriteList(song)
@@ -75,19 +78,18 @@ export const playerMixin = {
         this.saveFavoriteList(song)
       }
     },
+    // getFavoriteIcon(song) {
+    //   if (this.isFavorite(song)) {
+    //     return 'icon-favorite'
+    //   }
+    //   return 'icon-not-favorite'
+    // },
     isFavorite(song) {
-       console.log(this.favoriteList)
-      let index
-      if (this.favoriteList) {
-        index = this.favoriteList.findIndex((item) => {
-          return item.id === song.id
-        })
-        console.log(index)
-        return index > -1
-      } else {
-        console.log('false')
-        return false
-      }
+      if (!song || !this.favoriteList) return false
+      let index = this.favoriteList.findIndex((item) => {
+        return item.id === song.id
+      })
+      return index > -1
     },
     ...mapActions([
       'saveFavoriteList',

@@ -70,8 +70,8 @@
               <i @click="next" class="icon-next" :class="disableCls"></i>
             </div>
             <div class="icon i-right">
-              <!--<i class="icon" @click.stop="toggleFavorite(cSong)" :class="getFavoriteIcon(cSong)"></i>-->
-              <i class="icon icon-not-favorite"></i>
+              <i class="icon" @click.stop="toggleFavorite(cSong)" :class="favoriteIcon"></i>
+              <!--<i class="icon icon-not-favorite"></i>-->
             </div>
           </div>
         </div>
@@ -129,7 +129,8 @@
         currentLyric: null,
         currentLineNum: 0,
         currentShow: 'cd',
-        playingLyric: ''
+        playingLyric: '',
+        favoriteIcon: 'icon-not-favorite'
       }
     },
     computed: {
@@ -156,6 +157,11 @@
     },
     created() {
       this.touch = {}
+      // 判断searchHistory是否已经有值,如果有就提交到mutation,【解决localhost中有数据，但是历史列表无显示问题】
+      let favoriteList = this.$store.state.default.favoriteList
+      if (favoriteList && favoriteList.length > 0) {
+        this.setFavoriteList(favoriteList)
+      }
     },
     watch: {
       cSong(newSong, oldSong) {
@@ -179,6 +185,12 @@
             this.$refs.audio.play()
             this.getLyric()
           }, 1000)
+        }
+        // when current's song changing set favorite icon
+        if (this.isFavorite(newSong)) {
+          this.favoriteIcon = 'icon-favorite'
+        } else {
+          this.favoriteIcon = 'icon-not-favorite'
         }
       },
       playing(newPlaying) {
@@ -315,9 +327,9 @@
         this.currentLineNum = lineNum
         if (lineNum > 5) {
           let lineEl = this.$refs.lyricLine[lineNum - 5]
-          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+          this.$refs.lyricList && this.$refs.lyricList.scrollToElement(lineEl, 1000)
         } else {
-          this.$refs.lyricList.scrollToElement(0, 0)
+          this.$refs.lyricList && this.$refs.lyricList.scrollToElement(0, 0)
         }
         this.playingLyric = txt
       },
@@ -478,7 +490,8 @@
         setCsong: 'SET_C_SONG',
         setPlayMode: 'SET_PLAY_MODE',
         setPlayList: 'SET_PLAYLIST',
-        setPlaylistUrl: 'SET_PLAYLIST_URL'
+        setPlaylistUrl: 'SET_PLAYLIST_URL',
+        setFavoriteList: 'SET_FAVORITE_LIST'
       }),
       ...mapActions([
         'savePlayHistory'

@@ -7,8 +7,8 @@ const mutations = {
     Vue.set(state, 'singer', singer)
   },
   [types.SET_PLAYING_STATE](state, flag) {
-    //  state.playing = flag
-    Vue.set(state, 'playing', flag)
+    // state.playing = flag
+     Vue.set(state, 'playing', flag)
   },
   [types.SET_FULL_SCREEN](state, flag) {
     // state.fullScreen = flag
@@ -23,7 +23,7 @@ const mutations = {
     Vue.set(state, 'sequenceList', list)
   },
   [types.SET_PLAY_MODE](state, mode) {
-    //  state.playMode = playMode
+   // state.mode = mode
     Vue.set(state, 'mode', mode)
   },
   [types.SET_CURRENT_INDEX](state, index) {

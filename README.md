@@ -204,9 +204,12 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
     <tr>
         <td ><center><img src="static/imgs/favoriteProblem2.png" >css中添加监听方法</center></td>
         <td ><center><img src="static/imgs/favoriteProblem3.png"  >mixin中定义该方法</center></td>
-        <td><center><img src="static/imgs/favoriteProblem4.png"  >运行时发现不停被调用</center></td>
-        <td ><center><img src="static/imgs/favoriteProblem5.png"  >转个弯，修改为监听favoriteList</center> </td>
-        <td ><center><img src="static/imgs/favoriteProblem6.png"  >运行终于正常了</center> </td>
+        <td ><center><img src="static/imgs/favoriteProblem4.png"  >使用console.log在调用时打印</center></td>
+        <td><center><img src="static/imgs/favoriteProblem5.png"  >运行时发现不停被调用</center></td>
+    </tr>
+    <tr>
+        <td ><center><img src="static/imgs/favoriteProblem6.png"  >转个弯，修改为监听favoriteList</center> </td>
+        <td ><center><img src="static/imgs/favoriteProblem7.png"  >运行终于正常了</center> </td>
     </tr>
 </table>
 

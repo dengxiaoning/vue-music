@@ -71,7 +71,6 @@
             </div>
             <div class="icon i-right">
               <i class="icon" @click.stop="toggleFavorite(cSong)" :class="favoriteIcon"></i>
-              <!--<i class="icon icon-not-favorite"></i>-->
             </div>
           </div>
         </div>
@@ -129,8 +128,7 @@
         currentLyric: null,
         currentLineNum: 0,
         currentShow: 'cd',
-        playingLyric: '',
-        favoriteIcon: 'icon-not-favorite'
+        playingLyric: ''
       }
     },
     computed: {
@@ -186,7 +184,7 @@
             this.getLyric()
           }, 1000)
         }
-        // when current's song changing set favorite icon
+        // when current song changing set favorite icon
         if (this.isFavorite(newSong)) {
           this.favoriteIcon = 'icon-favorite'
         } else {

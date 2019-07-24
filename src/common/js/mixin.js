@@ -27,6 +27,11 @@ export const playlistMixin = {
 }
 
 export const playerMixin = {
+  data() {
+    return {
+      favoriteIcon: 'icon-not-favorite'
+    }
+  },
   computed: {
     iconMode() {
       // 解决从 搜索页面进入 播放组件时，获取mode 为undefined问题
@@ -78,12 +83,12 @@ export const playerMixin = {
         this.saveFavoriteList(song)
       }
     },
-    // getFavoriteIcon(song) {
-    //   if (this.isFavorite(song)) {
-    //     return 'icon-favorite'
-    //   }
-    //   return 'icon-not-favorite'
-    // },
+    getFavoriteIcon(song) {
+      if (this.isFavorite(song)) {
+        return 'icon-favorite'
+      }
+      return 'icon-not-favorite'
+    },
     isFavorite(song) {
       if (!song || !this.favoriteList) return false
       let index = this.favoriteList.findIndex((item) => {

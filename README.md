@@ -21,6 +21,8 @@ npm run build --report
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 ***
 ---
+[项目预览地址](http://whaala.com:8191)
+
 ###### 运行效果图
 <table>
     <tr>
@@ -212,6 +214,8 @@ actions.js中不初始化一下mode 在player.vue中的`...mapGetters({'mode'})`
         <td ><center><img src="static/imgs/favoriteProblem7.png"  >运行终于正常了</center> </td>
     </tr>
 </table>
+
+#### 项目部署就不在这里赘述了，有兴趣的朋友可以移步[docker +node 部署vue项目的心路历程](https://blog.csdn.net/qq_34817440/article/details/97480504)
 
 |   language    |      familiarity    |      duration         |
 |-------------- | :------------------:| :--------------------:|

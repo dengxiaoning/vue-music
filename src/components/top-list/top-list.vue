@@ -9,8 +9,8 @@
   import {mapGetters} from 'vuex'
   import {getMusicList} from '@/api/rank'
   import {ERR_OK} from '@/api/config'
-  import {createSong} from '@/common/js/song'
-  import {getMusicBySongmid} from '@/api/singer'
+  import {createSongNew} from '@/common/js/song'
+  // import {getMusicBySongmid} from '@/api/singer'
 
   export default {
     data() {
@@ -40,26 +40,36 @@
       _normalizeSongs(list) {
         let ret = []
         list.forEach((item) => {
-          const musicData = item.data
+           let musicData = item.data
           if (musicData.songid && musicData.albummid) {
-            // 传入songmid 查询获取 vkey
-            getMusicBySongmid(musicData.songmid).then(res => {
-              if (res.code === ERR_OK) {
-                const svkey = res.data.items
-                const songVkey = svkey[0].vkey
-                const filename = svkey[0].filename
-                const newSong = createSong(musicData, filename, songVkey)
-                ret.push(newSong)
-              } else {
-                console.log('查询 svkey  错误！')
-              }
-            }).catch(err => {
-              console.log(err)
-            })
+            ret.push(createSongNew(musicData))
           }
         })
         return ret
       }
+      // _normalizeSongs(list) {
+      //   let ret = []
+      //   list.forEach((item) => {
+      //     const musicData = item.data
+      //     if (musicData.songid && musicData.albummid) {
+      //       // 传入songmid 查询获取 vkey
+      //       getMusicBySongmid(musicData.songmid).then(res => {
+      //         if (res.code === ERR_OK) {
+      //           const svkey = res.data.items
+      //           const songVkey = svkey[0].vkey
+      //           const filename = svkey[0].filename
+      //           const newSong = createSong(musicData, filename, songVkey)
+      //           ret.push(newSong)
+      //         } else {
+      //           console.log('查询 svkey  错误！')
+      //         }
+      //       }).catch(err => {
+      //         console.log(err)
+      //       })
+      //     }
+      //   })
+      //   return ret
+      // }
     },
     computed: {
       title() {

@@ -97,7 +97,7 @@
     </transition>
     <play-list ref="playlistComponents"></play-list>
     <audio ref="audio" :src="cSong && cSong.url"
-           @canplay="ready" @error="error"
+           @play="ready" @error="error"
            @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
@@ -179,7 +179,8 @@
         if (!newSong.url) {
           this._setVKey(newSong, this.currentIndex)
         } else {
-          setTimeout(() => {
+          window.clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
             this.$refs.audio.play()
             this.getLyric()
           }, 1000)
@@ -217,7 +218,8 @@
             index,
             url
           })
-          setTimeout(() => {
+          window.clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
             this.$refs.audio.play()
             this.getLyric()
           }, 1000)
@@ -266,6 +268,7 @@
         }
         if (this.playList.length === 1) {
           this.loop()
+          return
         } else {
           let index = this.currentIndex + 1
           if (index === this.playList.length) {
@@ -286,6 +289,7 @@
         }
         if (this.playList.length === 1) {
           this.loop()
+          return
         } else {
           let index = this.currentIndex - 1
           if (index <= 0) {
@@ -311,6 +315,9 @@
       },
       getLyric() {
         this.cSong.getLyric().then((lyric) => {
+          if (this.cSong.lyric !== lyric) {
+            return
+          }
           this.currentLyric = new Lyric(lyric, this.handleLyric)
           if (this.playing) {
             this.currentLyric.play()
